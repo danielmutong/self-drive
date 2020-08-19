@@ -1,4 +1,5 @@
-This self-driving car algorithm is built using OpenCV for C++. 
+This self-driving and lane detection algorithms are built using OpenCV for C++. 
+
 Breakdown:
 1) The game window is found with the help of Xdo library
 2) Each frame is passed as a Mat file and initally resized and turned into grayscale
