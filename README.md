@@ -5,3 +5,4 @@ The FPGA receives a video stream via HDMI and after reducing the image size and 
 is passed onto an Arm microcontroller to perform lane detection and self-driving, and potentially, object detection.
 
 Currently, the lane detection and self-driving is complete and is now in progress of integrating with the firmware.
+Further details are explained within their corresponding folders.
