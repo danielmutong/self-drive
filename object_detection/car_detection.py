@@ -1,6 +1,4 @@
-        
-# load yolov3 model and perform object detection
-# based on https://github.com/experiencor/keras-yolo3
+
 import numpy as np
 from numpy import expand_dims
 from keras.models import load_model
@@ -114,47 +112,30 @@ def do_nms(boxes, nms_thresh):
                                 if bbox_iou(boxes[index_i], boxes[index_j]) >= nms_thresh:
                                         boxes[index_j].classes[c] = 0
                                         
-# load and prepare an image
 def load_image_pixels(filename, shape):
-        # load the image to get its shape
         image = load_img(filename)
         width, height = image.size
-        # load the image with the required size
         image = load_img(filename, target_size=shape)
-        # convert to numpy array
         image = img_to_array(image)
-        # scale pixel values to [0, 1]
         image = image.astype('float32')
         image /= 255.0
-        # add a dimension so that we have one sample
         image = expand_dims(image, 0)
         return image, width, height
 
-# get all of the results above a threshold
 def get_boxes(boxes, labels, thresh):
         v_boxes, v_labels, v_scores = list(), list(), list()
-        # enumerate all boxes
         for box in boxes:
-                # enumerate all possible labels
                 for i in range(len(labels)):
-                        # check if the threshold for this label is high enough
                         if box.classes[i] > thresh:
                                 v_boxes.append(box)
                                 v_labels.append(labels[i])
                                 v_scores.append(box.classes[i]*100)
-                                # don't break, many labels may trigger for one box
         return v_boxes, v_labels, v_scores
 
 
-
-# load yolov3 model
 model = load_model('model.h5')
-# define the expected input shape for the model
 input_w, input_h = 416, 416
 
-
-# define our new photo
-#photo_filename = 'car.jpg'
 
 vidcap = cv2.VideoCapture('cars2.mp4')
 count = 0
@@ -163,17 +144,15 @@ count = 0
 success = True        
 
 while(vidcap.isOpened()):
-        #        fn = "test"+ str(count) + '.jpg'
         fn = "test.jpg"
         success,image2 = vidcap.read()
-        #        cv2.imwrite("test.jpg", image2)     # save frame as JPEG file
         gray = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
 
         resized_image = cv2.resize(gray, (200, 200)) 
-        cv2.imwrite(fn, resized_image)     # save frame as JPEG file
+        cv2.imwrite(fn, resized_image)    
         if success == False:
                 break
-        if cv2.waitKey(10) == 27:                     # exit if Escape is hit
+        if cv2.waitKey(10) == 27:
                 break
         print('Read a new frame: ', success)
         count += 1
@@ -225,5 +204,5 @@ while(vidcap.isOpened()):
         cv2.waitKey(30)
         print(count)
 
-#cap.release()
-#cv2.destroyAllWindows()
+cap.release()
+cv2.destroyAllWindows()

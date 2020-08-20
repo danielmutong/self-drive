@@ -1,4 +1,3 @@
-# based on https://github.com/experiencor/keras-yolo3
 import struct
 import numpy as np
 from keras.layers import Conv2D
@@ -17,11 +16,11 @@ def _conv_block(inp, convs, skip=True):
 		if count == (len(convs) - 2) and skip:
 			skip_connection = x
 		count += 1
-		if conv['stride'] > 1: x = ZeroPadding2D(((1,0),(1,0)))(x) # peculiar padding as darknet prefer left and top
+		if conv['stride'] > 1: x = ZeroPadding2D(((1,0),(1,0)))(x) 
 		x = Conv2D(conv['filter'],
 				   conv['kernel'],
 				   strides=conv['stride'],
-				   padding='valid' if conv['stride'] > 1 else 'same', # peculiar padding as darknet prefer left and top
+				   padding='valid' if conv['stride'] > 1 else 'same', 
 				   name='conv_' + str(conv['layer_idx']),
 				   use_bias=False if conv['bnorm'] else True)(x)
 		if conv['bnorm']: x = BatchNormalization(epsilon=0.001, name='bnorm_' + str(conv['layer_idx']))(x)
@@ -154,11 +153,7 @@ class WeightReader:
 	def reset(self):
 		self.offset = 0
  
-# define the model
 model = make_yolov3_model()
-# load the model weights
 weight_reader = WeightReader('yolov3.weights')
-# set the model weights into the model
 weight_reader.load_weights(model)
-# save the model to file
 model.save('model.h5')
